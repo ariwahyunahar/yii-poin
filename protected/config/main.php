@@ -198,8 +198,8 @@ return array(
 		'db'=>array(
 			'connectionString' => 'mysql:host=localhost;dbname=poin',
 			'emulatePrepare' => true,
-			'username' => 'poin',
-			'password' => 'poin//2017',
+			'username' => 'xxxx',
+			'password' => 'xxxx',
 			'charset' => 'utf8',
 		),
 		
@@ -263,8 +263,8 @@ return array(
 			'port'=> '465',
 			'encryption'=>'ssl',
 			'From'=>'lumy.nugraha@infomedia.web.id',
-			'username'=>'poin.infomedianusantara@gmail.com',
-			'password'=>'infomedia',
+			'username'=>'Xxx',
+			'password'=>'xxx',
 			//'email'=>'mpah_mpeh@yahoo.com',
 			// For sendmail:
 		),
