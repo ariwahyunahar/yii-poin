@@ -1,0 +1,98 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<link rel="icon" type="image/png" href="<?php echo $this->baseUrl() ?>/mobile/assets/img/favicon-16x16.png" sizes="16x16">
+<link rel="icon" type="image/png" href="<?php echo $this->baseUrl() ?>/mobile/assets/img/favicon-32x32.png" sizes="32x32">
+<title>POIN</title>
+<link rel="stylesheet" href="<?php echo $this->baseUrl() ?>/mobile/bower_components/uikit/css/uikit.almost-flat.min.css" media="all">
+<link rel="stylesheet" href="<?php echo $this->baseUrl() ?>/mobile/assets/icons/flags/flags.min.css" media="all">
+<link rel="stylesheet" href="<?php echo $this->baseUrl() ?>/mobile/assets/css/main.min.css" media="all">
+<script type="text/javascript" src="<?php echo $this->baseUrl() ?>/mobile/assets/js/jquery.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl() ?>/mobile/ariwa/js/inclut.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl() ?>/mobile/ariwa/js/jquery.redirect.js"></script>
+
+<link rel="stylesheet" href="<?php echo $this->baseUrl() ?>/mobile/ariwa/ajaxpaging/paging.css"/>
+
+<link href="<?php echo $this->baseUrl() ?>/mobile/content/styles.css" rel="stylesheet" />
+<script src="<?php echo $this->baseUrl() ?>/mobile/assets/sweetalert/sweetalert.min.js"></script>
+<link rel="stylesheet" href="<?php echo $this->baseUrl() ?>/mobile/assets/sweetalert/sweetalert.css">
+
+<link rel="stylesheet" href="<?php echo $this->baseUrl() ?>/mobile/validator/jquery.validation.css">
+<script src="<?php echo $this->baseUrl() ?>/mobile/validator/jquery.validation.js"></script>
+
+<link rel="stylesheet" href="<?php echo $this->baseUrl() ?>/mobile/add/main.css" media="all">
+</head>
+
+
+<body style="padding-top: 0;">
+<div class="loading-div-main" style="bottom: 0;right: 0;position: fixed;"><img src="<?php echo $this->baseUrl() ?>/mobile/ariwa/ajaxpaging/ajax-loader.gif" ></div>
+<div class="loading-div" style="bottom: 0;right: 0;position: fixed;"><img src="<?php echo $this->baseUrl() ?>/mobile/ariwa/ajaxpaging/ajax-loader.gif" ></div>
+
+<div id="content_utama"></div>
+
+	<!-- google web fonts -->
+    <script>
+        WebFontConfig = {
+            google: {
+                families: [
+                    'Source+Code+Pro:400,700:latin',
+                    'Roboto:400,300,500,700,400italic:latin'
+                ]
+            }
+        };
+        (function() {
+            var wf = document.createElement('script');
+            wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+            '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+            wf.type = 'text/javascript';
+            wf.async = 'true';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(wf, s);
+        })();
+    </script>
+
+    <!-- common functions -->
+    <script src="<?php echo $this->baseUrl() ?>/mobile/assets/js/common.min.js"></script>
+    <!-- uikit functions -->
+    <script src="<?php echo $this->baseUrl() ?>/mobile/assets/js/uikit_custom.min.js"></script>
+    <!-- altair common functions/helpers -->
+    <script src="<?php echo $this->baseUrl() ?>/mobile/assets/js/altair_admin_common.min.js"></script>
+    
+    
+</body>
+</html>
+
+
+
+<script type="text/javascript">
+function setpage(page, postpar){
+	if(!page){
+		alert('Ada kesalahan system. SIlahkan ulangi kembali.');
+		return false;
+	}
+	$(".loading-div").show(); //show loading element
+	$("#content_utama").empty();
+	if($(window).width() < 924){
+		$("body").addClass("sidebar_main_hiding")
+		.removeClass("sidebar_main_active sidebar_main_open"), $window
+		.width() < 1220
+		&& altair_page_content.show_content_sidebar(), setTimeout(
+		function() {
+			$body.removeClass("sidebar_main_hiding"), $window.resize()
+		}, 280);
+	}
+	$("#content_utama").load(
+		page
+		,{
+			link: page
+			, postpar: postpar
+		}
+		, function(response, status, xhr){
+		}
+	);
+}
+
+setpage('<?php echo $this->baseUrl() ?>/survey');
+</script>

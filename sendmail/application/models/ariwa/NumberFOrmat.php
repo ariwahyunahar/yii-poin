@@ -1,0 +1,40 @@
+<?php
+class Model_ariwa_NumberFOrmat{
+
+    static function format_decimal($s = 0){
+           return  number_format((float)$s, 2, '.', '');
+    }
+    
+    static function getJamByIndexSpot($spot = 1)
+    {
+    	$array = array(
+    		"" => "06:00"
+    	);
+    }
+    
+	static function getspot($jml = 1)
+    {
+    	$array = array(
+    		array(1, 1), array(2, 2), array(3, 3), array(4, 4), array(5, 5), array(6, 6), array(7, 7), array(8, 8), array(9, 9), array(10, 10), array(11, 11), array(12, 12), array(13, 13), array(14, 14), array(15, 15), array(16, 16), array(17, 17), array(18, 18), array(19, 19), array(20, 20), array(21, 21), array(22, 22), array(23, 23), array(24, 24), array(25, 25), array(26, 26), array(27, 27), array(28, 28), array(29, 29), array(30, 30), array(31, 31), array(32, 32), array(33, 33), array(34, 34), array(35, 35), array(36, 36), array(37, 37), array(38, 38), array(39, 39), array(40, 40), array(41, 41), array(42, 42), array(43, 43), array(44, 44), array(45, 45), array(46, 46), array(47, 47), array(48, 48), array(49, 49), array(50, 50), array(51, 51), array(52, 52), array(53, 53), array(54, 54), array(55, 55), array(56, 56), array(57, 57), array(58, 58), array(59, 59), array(60, 60), array(61, 61), array(62, 62), array(63, 63), array(64, 64), array(65, 65), array(66, 66), array(67, 67), array(68, 68), array(69, 69), array(70, 70), array(71, 71), array(72, 72), array(73, 73), array(74, 74), array(75, 75), array(76, 76), array(77, 77), array(78, 78), array(79, 79), array(80, 80), array(81, 81), array(82, 82), array(83, 83), array(84, 84), array(85, 85), array(86, 86), array(87, 87), array(88, 88), array(89, 89), array(90, 90), array(91, 91), array(92, 92), array(93, 93), array(94, 94), array(95, 95), array(96, 96), array(97, 97), array(98, 98), array(99, 99), array(100, 100), array(101, 101), array(102, 102), array(103, 103), array(104, 104), array(105, 105), array(106, 106), array(107, 107), array(108, 108), array(109, 109), array(110, 110), array(111, 111), array(112, 112), array(113, 113), array(114, 114), array(115, 115), array(116, 116), array(117, 117), array(118, 118), array(119, 119), array(120, 120), array(121, 121), array(122, 122), array(123, 123), array(124, 124), array(125, 125), array(126, 126), array(127, 127), array(128, 128), array(129, 129), array(130, 130), array(131, 131), array(132, 132), array(133, 133), array(134, 134), array(135, 135), array(136, 136), array(137, 137), array(138, 138), array(139, 139), array(140, 140), array(141, 141), array(142, 142), array(143, 143), array(144, 144), array(145, 145), array(146, 146), array(147, 147), array(148, 148), array(149, 149), array(150, 150), array(151, 151), array(152, 152), array(153, 153), array(154, 154), array(155, 155), array(156, 156), array(157, 157), array(158, 158), array(159, 159), array(160, 160), array(161, 161), array(162, 162), array(163, 163), array(164, 164), array(165, 165), array(166, 166), array(167, 167), array(168, 168), array(169, 169), array(170, 170), array(171, 171), array(172, 172), array(173, 173), array(174, 174), array(175, 175), array(176, 176), array(177, 177), array(178, 178), array(179, 179), array(180, 180), array(181, 181), array(182, 182), array(183, 183), array(184, 184), array(185, 185), array(186, 186), array(187, 187), array(188, 188), array(189, 189), array(190, 190), array(191, 191), array(192, 192), array(193, 193), array(194, 194), array(195, 195), array(196, 196), array(197, 197), array(198, 198), array(199, 199), array(200, 200), array(201, 201), array(202, 202), array(203, 203), array(204, 204), array(205, 205), array(206, 206), array(207, 207), array(208, 208), array(209, 209), array(210, 210), array(211, 211), array(212, 212), array(213, 213), array(214, 214), array(215, 215), array(216, 216), array(217, 217), array(218, 218), array(219, 219), array(220, 220), array(221, 221), array(222, 222), array(223, 223), array(224, 224), array(225, 225), array(226, 226), array(227, 227), array(228, 228), array(229, 229), array(230, 230), array(231, 231), array(232, 232), array(233, 233), array(234, 234), array(235, 235), array(236, 236), array(237, 237), array(238, 238), array(239, 239), array(240, 240), array(241, 241), array(242, 242), array(243, 243), array(244, 244), array(245, 245), array(246, 246), array(247, 247), array(248, 248), array(249, 249), array(250, 250), array(251, 251), array(252, 252), array(253, 253), array(254, 254), array(255, 255), array(256, 256), array(257, 257), array(258, 258), array(259, 259), array(260, 260), array(261, 261), array(262, 262), array(263, 263), array(264, 264), array(265, 265), array(266, 266), array(267, 267), array(268, 268), array(269, 269), array(270, 270), array(271, 271), array(272, 272), array(273, 273), array(274, 274), array(275, 275), array(276, 276), array(277, 277), array(278, 278), array(279, 279), array(280, 280), array(281, 281), array(282, 282), array(283, 283), array(284, 284), array(285, 285), array(286, 286), array(287, 287), array(288, 288), array(289, 289), array(290, 290), array(291, 291), array(292, 292), array(293, 293), array(294, 294), array(295, 295), array(296, 296), array(297, 297), array(298, 298), array(299, 299), array(300, 300), array(301, 301), array(302, 302), array(303, 303), array(304, 304), array(305, 305), array(306, 306), array(307, 307), array(308, 308), array(309, 309), array(310, 310), array(311, 311), array(312, 312), array(313, 313), array(314, 314), array(315, 315), array(316, 316), array(317, 317), array(318, 318), array(319, 319), array(320, 320), array(321, 321), array(322, 322), array(323, 323), array(324, 324), array(325, 325), array(326, 326), array(327, 327), array(328, 328), array(329, 329), array(330, 330), array(331, 331), array(332, 332), array(333, 333), array(334, 334), array(335, 335), array(336, 336), array(337, 337), array(338, 338), array(339, 339), array(340, 340), array(341, 341), array(342, 342), array(343, 343), array(344, 344), array(345, 345), array(346, 346), array(347, 347), array(348, 348), array(349, 349), array(350, 350), array(351, 351), array(352, 352), array(353, 353), array(354, 354), array(355, 355), array(356, 356), array(357, 357), array(358, 358), array(359, 359), array(360, 360), array(361, 361), array(362, 362), array(363, 363), array(364, 364), array(365, 365), array(366, 366), array(367, 367), array(368, 368), array(369, 369), array(370, 370), array(371, 371), array(372, 372), array(373, 373), array(374, 374), array(375, 375), array(376, 376), array(377, 377), array(378, 378), array(379, 379), array(380, 380), array(381, 381), array(382, 382), array(383, 383), array(384, 384), array(385, 385), array(386, 386), array(387, 387), array(388, 388), array(389, 389), array(390, 390), array(391, 391), array(392, 392), array(393, 393), array(394, 394), array(395, 395), array(396, 396), array(397, 397), array(398, 398), array(399, 399), array(400, 400), array(401, 401), array(402, 402), array(403, 403), array(404, 404), array(405, 405), array(406, 406), array(407, 407), array(408, 408), array(409, 409), array(410, 410), array(411, 411), array(412, 412), array(413, 413), array(414, 414), array(415, 415), array(416, 416), array(417, 417), array(418, 418), array(419, 419), array(420, 420), array(421, 421), array(422, 422), array(423, 423), array(424, 424), array(425, 425), array(426, 426), array(427, 427), array(428, 428), array(429, 429), array(430, 430), array(431, 431), array(432, 432)
+    	);
+    	if($jml>432){
+    		for($a=433;$a<=$jml;$a+=1){
+    			$array[] = array($a, $a);
+    		}
+    	}
+    	return $array;
+    }
+    
+    // for asc index spot
+    static function compareTwoValues($a,$b){
+    	if((int)$a['start'] == (int)$b['start'])return 0;
+	    if((int)$a['start']  > (int)$b['start'])return 1;
+	    if((int)$a['start']  < (int)$b['start'])return -1;
+    }
+ 	// for asc index spot untuk validasi data
+    static function compareTwoValuesValidation($a,$b){
+    	if((int)$a["1"] == (int)$b["1"])return 0;
+	    if((int)$a["1"]  > (int)$b["1"])return 1;
+	    if((int)$a["1"]  < (int)$b["1"])return -1;
+    }
+}

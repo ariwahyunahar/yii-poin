@@ -1,0 +1,12 @@
+.ariwa_header_main {
+	margin-left: auto;
+	margin-right: auto;
+	width: 860px;
+	
+}
+
+#ariwa_menu_header_modin {
+	background: url("../img/memodinas.png") no-repeat scroll center bottom transparent;
+    height: 65px;
+    padding: 0;
+}

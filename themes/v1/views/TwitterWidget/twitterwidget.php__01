@@ -1,0 +1,41 @@
+<div id="Tweet" class="block">
+	<div class="inner">
+        
+		<script type="text/javascript" src='http://widgets.twimg.com/j/2/widget.js'></script>
+		<script type="text/javascript">
+		new TWTR.Widget({
+		  version: 2,
+		  type: 'profile',
+		  rpp:2,
+		  interval: 6000,
+		  title: 'PT. Infomedia Nusantara',
+		  subject: '@infonusa',
+		  width: 213,
+		  height: 250,
+		  theme: {
+			shell: {
+			  /*background: '#003366',*/
+			  background: '#EBEBEB',
+			  color: '#20498D'
+			},
+			tweets: {
+			  background: '#ffffff',
+			  color: '#444444',
+			  links: '#1985b5'
+			}
+		  },
+		  features: {
+			scrollbar: true,
+			loop: false,
+			live: false,
+			hashtags: true,
+			timestamp: true,
+			avatars: true,
+			toptweets: true,
+			behavior: 'default'
+		  }
+		}).render().setUser('infonusa').start();
+		</script>
+		
+	</div>
+</div>

@@ -1,0 +1,544 @@
+body,div {
+	margin: 0;
+	padding: 0;
+	font-family: "Arial";
+	font-size: 12px;
+}
+
+.ariwa_header_main {
+	margin-left: auto;
+	margin-right: auto;
+	width: 960px;
+	height: 120px;
+}
+
+#ariwa_menu_md {
+	height: 50px;
+	padding: 0;
+	
+	background-repeat: no-repeat;
+	background-attachment: scroll;
+	background-position: center bottom 10px;
+	background-position-x: 50%;
+	background-position-y: 50%;
+	background-image: url("/ariwa/np_images/icon/nodin.png");
+}
+
+#ariwa_menu_email {
+	background-repeat: no-repeat;
+	background-attachment: scroll;
+	background-position: center bottom 10px;
+	background-position-x: 50%;
+	background-position-y: 50%;
+	background-image: url("/ariwa/np_images/icon/email.png");
+	
+	height: 50px;
+	padding: 0;
+}
+
+#ariwa_menu_hd {
+	background-repeat: no-repeat;
+	background-attachment: scroll;
+	background-position: center bottom 10px;
+	background-position-x: 50%;
+	background-position-y: 50%;
+	background-image: url("/ariwa/np_images/icon/helpdesk.png");
+	
+	
+	height: 50px;
+	padding: 0;
+}
+
+#ariwa_menu_hris {
+	background-repeat: no-repeat;
+	background-attachment: scroll;
+	background-position: center bottom 10px;
+	background-position-x: 50%;
+	background-position-y: 50%;
+	background-image: url("/ariwa/np_images/icon/hris.png");
+	
+	height: 50px;
+	padding: 0;
+}
+
+#ariwa_menu_cuti {
+	background-repeat: no-repeat;
+	background-attachment: scroll;
+	background-position: center bottom 10px;
+	background-position-x: 50%;
+	background-position-y: 50%;
+	background-image: url("/ariwa/np_images/icon/cuti.png");
+	
+	height: 50px;
+	padding: 0;
+}
+
+#ariwa_menu_scm {
+	background-repeat: no-repeat;
+	background-attachment: scroll;
+	background-position: center bottom 10px;
+	background-position-x: 50%;
+	background-position-y: 50%;
+	background-image: url("/ariwa/np_images/icon/scm.png");
+	
+	height: 50px;
+	padding: 0;
+}
+
+#ariwa_menu_k360 {
+	background-repeat: no-repeat;
+	background-attachment: scroll;
+	background-position: center bottom 10px;
+	background-position-x: 50%;
+	background-position-y: 50%;
+	background-image: url("/ariwa/np_images/icon/k360.png");
+	
+	height: 50px;
+	padding: 0;
+}
+
+#ariwa_top-links {
+	font-size: 1em;
+	margin-top: 5px;
+}
+
+#ariwa_top-links ul {
+	float: right;
+	margin: 0;
+	padding: 0;
+}
+
+#ariwa_top-links ul li {
+	margin: 30px 18px;
+	font-size: 11px;
+	font-family: "Arial";
+}
+
+ul.ariwa_menu li {
+	display: inline;
+	float: left;
+}
+
+.ariwa_menu li a {
+	color: #828285;
+	display: table-cell;
+	vertical-align: bottom;
+	line-height: 0px;
+}
+
+ul.ariwa_menu {
+	list-style: none outside none;
+	margin: 0;
+	padding: 0;
+}
+
+/* ============= MENU ================== */
+.ariwa_menu_kedua {
+	background: url("/ariwa/np_images/menus.png") repeat-x center;
+	padding: 10px;
+}
+
+.ariwa_menu_kedua_masuk {
+	margin-left: auto;
+	margin-right: auto;
+	width: 960px;
+	padding: 0;
+}
+
+.ariwa_menu_utama {
+	margin-left: 0;
+	margin-right: 0;
+	width: 860px;
+	padding: 0;
+}
+
+.ariwa_menu_utama a {
+	padding: 5px;
+	border: 1px solid;
+}
+
+ul.arrowunderline {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	text-align: center;
+	/* enter "left", "right", or "center" to orient the menu accordingly */
+	font-size: 12px;
+	font-weight: bold;
+	font-family: "Arial";
+}
+
+ul.arrowunderline li {
+	display: inline;
+	margin-right: 15px; /* spacing between each menu item */
+}
+
+ul.arrowunderline li a {
+	position: relative;
+	color: #fff;
+	padding-bottom: 8px;
+	/*spacing between each menu item and arrow underline beneath it */
+	text-decoration: none;
+	padding-top: 12px;
+}
+
+ul.arrowunderline li a:hover {
+	border-bottom: 3px solid #eee; /* style of arrow underline */
+	color: #eee;
+}
+
+.home_dw {
+	background: url("/ariwa/np_images/home_button.png");
+	padding: 0;
+	width: 100px;
+}
+
+.ariwa_footer {
+	background: url("/ariwa/np_images/footer.png") repeat-x center;
+	height: 131px;
+	padding: 0;
+}
+
+/* ======================================= */
+.ariwa_menu_home {
+	float: left;
+	margin-left: 10px;
+}
+
+.ariwa_menu_home a {
+	background-repeat: no-repeat;
+	background-position: center;
+	background-image: url("/ariwa/np_images/icon/home_button.png");
+	padding: 10px 20px 10px 20px;
+}
+
+.ariwa_menu_home a:hover {
+	background: url("/ariwa/np_images/icon/home_button_hover.png") no-repeat
+		center;
+}
+
+/* ============================================== */
+#w2b-searchbox {
+	background: url("/ariwa/np_images/icon/search_field.png") no-repeat scroll
+		center center transparent;
+	width: 200px;
+	height: 21px;
+	disaply: block;
+}
+
+form#w2b-searchform {
+	display: block;
+	margin: 0;
+}
+
+form#w2b-searchform #s {
+	padding: 3px 3px 3px 30px;
+	margin: 0;
+	width: 160px;
+	font-size: 12px;
+	vertical-align: top;
+	border: none;
+	background: transparent;
+	color: #828285;
+}
+
+form#w2b-searchform #sbutton {
+	margin: 0;
+	padding: 0;
+	height: 30px;
+	width: 30px;
+	vertical-align: top;
+	border: none;
+	background: transparent;
+}
+
+/* ============================================== */
+.ariwa_header_info_top {
+	padding: 5px;
+	background-color: #eee;
+	height: 25px;
+}
+
+.ariwa_header_info {
+	margin-left: auto;
+	margin-right: auto;
+	width: 960px;
+}
+
+.ariwa_header_info_tgl {
+	margin-left: 10px;
+	float: left;
+	font-size: 12px;
+	margin-top: 5px;
+	font-weight: bold;
+}
+.ariwa_header_info_kotak {
+	margin-right: 10px;
+	float: right;
+	font-weight: bold;
+}
+.ariwa_header_info_kotak a {
+	background: url("/ariwa/np_images/icon/button_selamat_datang.png") no-repeat center;
+	padding: 15px 21px;
+}
+
+.ariwa_header_info_selamat_datang {
+	margin-right: 10px;
+	float: right;
+	font-weight: bold;
+	font-size: 12px;
+	margin-top: 5px;
+}
+
+/* =================================================== */
+.ariwa_home_bg {
+	background: url("/ariwa/np_images/bg_home.png") repeat-x top;
+	background-color: #C9C9C9;
+}
+.ariwa_home_utama {
+	margin-left: auto;
+	margin-right: auto;
+	width: 960px;
+}
+.ariwa_himbauan {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+.ariwa_himbauan_masuk {
+	background-color: #FCDF17;
+	padding: 5px;
+	padding-left: 10px;
+}
+.ariwa_himbauan_masuk_penting {
+	background: url("/ariwa/np_images/icon/warning.png") no-repeat scroll left transparent;
+	padding-left: 25px;
+	font-weight: bold;
+	float: left;
+	margin-right: 10px;
+}
+#ariwa_himbauan_masuk_penting_isi ul {
+	list-style-type: circle;
+	padding: 0px;
+}
+#ariwa_himbauan_masuk_penting_isi ul li {
+	padding-left: 5px;
+	margin-left: 20px;
+}
+
+/* =========================================================== */
+.ariwa_banner {
+	width: 632px;
+	height: 365px;
+	background-color: #fff;
+	margin-bottom: 10px;
+	margin-left: 10px;
+}
+.ariwa_event {
+	width: 317px;
+	height: 365px;
+	background-color: #fff;
+	margin-bottom: 10px;
+}
+.ariwa_new_emp {
+	margin-left: 10px;
+	width: 307px;
+	height: 365px;
+	margin-top: 10px;
+	background-color: #F2F2F2;
+	position: relative;
+}
+.ariwa_berita {
+	margin-top: 10px;
+	width: 317px;
+	height: 365px;
+	background-color: #F2F2F2;
+	position: relative;
+}
+.ariwa_ulang_tahun {
+	margin-top: 10px;
+	margin-left: 10px;
+	width: 315px;
+	height: 365px;
+	background-color: #F2F2F2;
+	position: relative;
+}
+.ariwa_inner_judul {
+	padding: 12px;
+	background: url("/ariwa/np_images/menus.png") repeat-x center;
+	color: #fff;
+	font-weight: bold;
+}
+.ariwa_inner_footer {
+	padding: 12px;
+	padding-right: 0;
+	background-color: #fff;
+	position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    border-bottom: 1px #ddd solid;
+}
+.ariwa_inner_footer_a1 {
+	
+}
+.ariwa_inner_footer_a1 a {
+	background: url("/ariwa/np_images/icon/next.png") no-repeat right;
+	padding: 0;
+	float: right;
+	width: 100%;
+}
+.ariwa_inner_footer_a1 a:hover {
+	background: url("/ariwa/np_images/icon/next_hover.png") no-repeat right;
+	padding: 0;
+	float: right;
+	width: 100%;
+}
+
+. 
+.ariwa_inner_footer_a2 a {
+	
+}
+.ariwa_inner_footer_a2 a:hover {
+	
+}
+
+/* === */
+.ariwa_berita_isi {
+	padding: 10px;
+}
+.ariwa_berita_isi ul {
+	padding-left: 10px;
+}
+.ariwa_berita_isi ul li {
+	list-style-image: url("/ariwa/np_images/icon/list_berita.png");
+	margin-bottom: 5px;
+}
+.ariwa_berita_isi ul li .image-row {
+	float: left;
+}
+
+.ariwa_berita_isi a {
+	font-weight: bold;
+}
+
+
+/* === */
+.ariwa_berita_isi_img {
+	padding: 0;
+}
+.ariwa_berita_isi_img table {
+	margin: 0;
+	padding: 0;
+	margin-right: 5px;
+}
+.ariwa_berita_isi_img table td {
+	padding-left: 5px;
+	vertical-align: top;
+	padding-right: 5px;
+	padding-bottom: 5px;
+}
+
+.ariwa_berita_isi_img table img {
+	width: 87px;
+	height: 65px;
+}
+
+.ariwa_berita_isi_img ul {
+	padding-left: 0;
+}
+.ariwa_berita_isi_img ul li {
+	list-style: none;
+	margin-bottom: 5px;
+	height: 70px;
+}
+.ariwa_berita_isi_img ul li .image-row {
+	float: left;
+}
+
+.ariwa_berita_isi_img a {
+	font-weight: bold;
+}
+
+
+/* === */
+.ariwa_ulang_tahun_isi {
+	padding: 10px;
+	padding-left: 20px;
+}
+.ariwa_ulang_tahun_isi ul {
+	padding-left: 10px;
+}
+.ariwa_ulang_tahun_isi ul li {
+	list-style-image: url("/ariwa/np_images/icon/list_ulangtahun.png");
+	vertical-align: top;
+	margin-bottom: 3px;
+}
+
+/* =================================================== */
+.ariwa_container {
+    position:relative;
+}
+
+#ariwa_drop {
+    display:none; /* Hide it first of all */
+    background:#666666;
+    box-shadow:2px 2px 3px rgba(0,0,0,0.15);
+    position:absolute;
+    top:28px;
+    right: 11px;
+    width:200px;
+    border-radius: 5px 0 5px 5px;
+}
+
+#ariwa_drop a {
+    color:#fff;
+    display:block;
+    padding:5px 10px;
+    font-family:Helvetica, Arial, sans-serif;
+    font-size:12px;
+    text-decoration:none;
+    border-radius: 5px 0 5px 5px;
+    padding-left: 25px;
+}
+
+#ariwa_drop a:hover {
+    background:#333;
+    color:#FFF;
+    border-radius: 5px 0 5px 5px;
+}
+
+#ariwa_drop .alogout a {
+    background: url("/ariwa/np_images/icon/logout.png") no-repeat left;
+    margin-left: 5px;
+}
+#ariwa_drop .alogout a:hover {
+    background: url("/ariwa/np_images/icon/logout.png") #333 no-repeat left;
+    color:#FFF;
+    border-radius: 5px 0 5px 5px;
+    margin-left: 5px;
+}
+/* ================================================== */
+
+
+.twiter-sld {
+	background-image: url('/ariwa/np_css/img/twitter-hover.png');	
+}
+.fb-sld {
+	background-image: url('/ariwa/np_css/img/facebook-hover.png');	
+}
+
+.social-slide {
+	height: 38px;
+	width: 38px;
+	margin-top: -8px;
+	float: left;
+	-webkit-transition: all ease 0.3s;
+	-moz-transition: all ease 0.3s;
+	-o-transition: all ease 0.3s;
+	-ms-transition: all ease 0.3s;
+	transition: all ease 0.3s;
+}
+.social-slide:hover {
+	background-position: 0px -38px;
+	box-shadow: 0px 0px 4px 1px rgba(0,0,0,0.8);
+}

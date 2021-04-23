@@ -1,0 +1,345 @@
+<style type="text/css">
+	#paym table td {
+		font: normal 12px tahoma, verdana, helvetica;
+	}
+	#paym {
+		width: 980px;
+	}
+	
+	#paym_bulan {
+		padding: 0px;
+	}
+	
+	a.paym_pdf {
+		background: #fff url(/pdf.png) top left no-repeat; 
+		background-size:20px 20px;
+		text-align: center;
+		padding: 5px;
+		padding-left: 25px;
+		padding-bottom: 25px;
+    }
+</style>
+
+<div id="perface-top-wrapper" class="perface-top-wrapper">
+	<div id="perface-top" class="container_24">
+		
+		<?php $this->beginWidget('InfoWidget', array(
+			'title'=>'Latest Info',
+		)); ?>
+		
+		<?php $this->endWidget(); ?>
+		<div class="clear"></div>
+	</div>
+	
+</div>
+<div class="clear"></div>
+
+<div id="postscript-wrapper" class="postscript-wrapper">
+	<div id="postscript" class="container_24">
+
+<div id="content-detail-all-<?php echo $idpage ?>" class="page" >
+					
+					<h2 class="title"> <?php echo $title ?> </h2>
+					<div style="float: left;position: relative;width: 100%">
+<div>
+	
+	<form action="/gaji" method="post">
+	Periode :  
+	<select name="mydropdown" id="paym_bulan">
+		<?php foreach($periods as $hsl){ ?>
+			<option value="<?php echo $hsl; ?>" <?php if($period == $hsl){ echo 'selected="selected"'; } ?> ><?php echo $hsl; ?></option>
+		<?php } ?>
+	</select>
+	    <input type="submit" value="Tampilkan" name="period" id="frm1_submit" /> 
+	    <input type="submit" value="Export PDF" name="period" onclick="exportPDF()" id="frm1_submit" />
+	</form>
+</div>
+
+
+<br>
+<br>
+
+
+
+<?php // MULAI ============================= ?>					
+<?php $hasil = $results; ?>
+
+<?php if($hasil){ ?>
+
+<div style="padding: 10px;" id="paym">
+
+	<table cellpadding="0" cellspacing="0">
+		 <tr>
+		  <td width="650px">
+			<div style="padding: 2px;border: 2px solid;">
+				<table cellpadding="0" cellspacing="0">
+				 <tr>
+				  <td width="150px">NAMA KARYAWAN</td>
+				  <td width="5px">:</td>
+				  <td><?php echo $hasil->NAMA_KARYAWAN ?></td>
+				 <tr>
+				 <tr>
+				  <td>NO KARYAWAN</td>
+				  <td>:</td>
+				  <td><?php echo $hasil->NIK ?></td>
+				 <tr>
+				 <tr>
+				  <td>DEPARTEMEN</td>
+				  <td>:</td>
+				  <td><?php echo $hasil->DEPARTEMEN ?></td>
+				 <tr>
+				</table>
+			</div>
+			</td>
+			<td width="500px">
+				<div style="padding: 3px;float: left;">
+					<img src="http://<?php echo $_SERVER["HTTP_HOST"] ?>/logo.png" width="160px;">
+				</div>
+				<div style="padding: 5px;padding-top: 20px;">
+				Jl. RS Fatmawati 77-81. Jakarta 12150<br>
+				Phone. 021 7201221. Fax. 021 7201226
+				</div>
+			</td>
+			</tr>
+	</table>
+	
+	<div style="padding: 5px;">
+		<div style="text-align: center;">
+			<b>PERINCIAN PENDAPATAN</b><br>
+			BULAN: <?php echo $hasil->BULAN; ?>
+		</div>
+		<br>
+		<br>
+		<table cellpadding="0" cellspacing="0">
+			 <tr>
+			  	<td width="500px" style="vertical-align: top;">
+			  		[I] PENDAPATAN
+			  		<br>
+			  		<br>
+					<table cellpadding="0" cellspacing="0" width="400px">
+						<tr>
+						  	<td width="10px">A)</td>
+							<td colspan="2" width="270px">Gaji Pokok</td>
+							<td width="120px;" align="right"><?php echo $hasil->GAJI_POKOK;  ?></td>
+						</tr>
+						<tr>
+						  	<td width="10px">&nbsp;</td>
+							<td colspan="2" width="270px">&nbsp;</td>
+							<td width="120px;" align="right">&nbsp;</td>
+						</tr>
+						<tr>
+						  	<td width="">B)</td>
+							<td colspan="2">Tunjangan</td>
+							<td width="120px;" align="right">&nbsp;</td>
+						</tr>
+						<?php if($hasil->TUNJ_TIDAK_TETAP){ ?>
+							<tr>
+							  	<td width="">&nbsp;</td>
+								<td width="">&nbsp;</td>
+								<td width="">Tidak Tetap</td>
+								<td width="120px;" align="right"><?php echo $hasil->TUNJ_TIDAK_TETAP ?></td>
+							</tr>
+						<?php } ?>
+						<?php if($hasil->TUNJ_JABATAN){ ?>
+							<tr>
+							  	<td width="">&nbsp;</td>
+								<td width="">&nbsp;</td>
+								<td width="">Jabatan</td>
+								<td width="120px;" align="right"><?php echo $hasil->TUNJ_JABATAN ?></td>
+							</tr>
+						<?php } ?>
+						<?php if($hasil->TUNJ_TRANSISI_ORPROM){ ?>
+							<tr>
+							  	<td width="">&nbsp;</td>
+								<td width="">&nbsp;</td>
+								<td width="">Transisi (Orprom)</td>
+								<td width="120px;" align="right"><?php echo $hasil->TUNJ_TRANSISI_ORPROM ?></td>
+							</tr>
+						<?php } ?>
+						<?php if($hasil->TUNJ_TRANSISI_LAINYA){ ?>
+							<tr>
+							  	<td width="">&nbsp;</td>
+								<td width="">&nbsp;</td>
+								<td width="">Transisi (Lainya)</td>
+								<td width="120px;" align="right"><?php echo $hasil->TUNJ_TRANSISI_LAINYA ?></td>
+							</tr>
+						<?php } ?>
+						<?php if($hasil->TUNJ_TRANSISI_PGS){ ?>
+							<tr>
+							  	<td width="">&nbsp;</td>
+								<td width="">&nbsp;</td>
+								<td width="">Transisi PGS</td>
+								<td width="120px;" align="right"><?php echo $hasil->TUNJ_TRANSISI_PGS ?></td>
+							</tr>
+						<?php } ?>
+						<?php if($hasil->TUNJ_TRANSISI_HP){ ?>
+							<tr>
+							  	<td width="">&nbsp;</td>
+								<td width="">&nbsp;</td>
+								<td width="">Transisi HP</td>
+								<td width="120px;" align="right"><?php echo $hasil->TUNJ_TRANSISI_HP ?></td>
+							</tr>
+						<?php } ?>
+						<tr>
+						  	<td width="">&nbsp;</td>
+							<td colspan="2">&nbsp;</td>
+							<td width="120px;" align="right">&nbsp;</td>
+						</tr>
+						<?php if($hasil->RAPEL){ ?>
+						<tr>
+						  	<td width="">*)</td>
+							<td colspan="2">Rapel Gaji</td>
+							<td width="120px;" align="right"><?php echo $hasil->RAPEL ?></td>
+						</tr>
+						<?php } ?>
+						<?php if($hasil->UPAH_LEMBUR){ ?>
+						<tr>
+						  	<td width="">*)</td>
+							<td colspan="2">Upah Lembur</td>
+							<td width="120px;" align="right"><?php echo $hasil->UPAH_LEMBUR ?></td>
+						</tr>
+						<?php } ?>
+					</table>
+				</td>
+				<td width="500px" style="vertical-align: top;">
+					[II] POTONGAN2
+					<br>
+			  		<br>
+					<table cellpadding="0" cellspacing="0" width="400px">
+						<tr>
+						  	<td width="">Pot. DAPIN</td>
+							<td align="right"><?php echo $hasil->POT_DAPIN ?></td>
+						</tr>
+						<tr>
+						  	<td>Pot. JAMSOSTEK</td>
+							<td align="right"><?php echo $hasil->POT_JAMSOSTEK ?></td>
+						</tr>
+						<tr>
+						  	<td>Pot. DPLK</td>
+							<td align="right"><?php echo $hasil->POT_DPLK ?></td>
+						</tr>
+						<tr>
+						  	<td>Pot. DAPENTEL</td>
+							<td align="right"><?php echo $hasil->POT_DAPENTEL ?></td>
+						</tr>
+						<tr>
+						  	<td>Pot. Pinjaman / Excess</td>
+							<td align="right"><?php echo $hasil->POT_PINJAMAN_OR_EXCESS ?></td>
+						</tr>
+						<tr>
+						  	<td>Pot. Lain lain</td>
+							<td align="right"><?php echo $hasil->POT_LAIN_LAIN ?></td>
+						</tr>
+						<tr>
+						  	<td>Pot. SPIN</td>
+							<td align="right"><?php echo $hasil->POT_SPIN ?></td>
+						</tr>
+						<tr>
+						  	<td>Pot. ZIS (BDI)</td>
+							<td align="right"><?php echo $hasil->POT_ZIS_OR_BDI ?></td>
+						</tr>
+						<tr>
+						  	<td>Tab. Pokok</td>
+							<td align="right"><?php echo $hasil->TAB_POKOK ?></td>
+						</tr>
+						<tr>
+						  	<td>Tab. Wajib</td>
+							<td align="right"><?php echo $hasil->TAB_WAJIB ?></td>
+						</tr>
+						<tr>
+						  	<td>Tab. Sukarela</td>
+							<td align="right"><?php echo $hasil->TAB_SUKARELA ?></td>
+						</tr>
+						<tr>
+						  	<td>Pot. Belanja / Pinjaman</td>
+							<td align="right"><?php echo $hasil->POT_BELANJA_OR_PINJAMAN ?></td>
+						</tr>
+						<tr>
+						  	<td>Pot. IMC / Flexi</td>
+							<td align="right"><?php echo $hasil->POT_IMC_FLEXI ?></td>
+						</tr>
+						<?php if($hasil->TELKOM_IURAN_TASPEN){ ?>
+						<tr>
+						  	<td>Iuran Taspen (Telkom)</td>
+							<td align="right"><?php echo $hasil->TELKOM_IURAN_TASPEN ?></td>
+						</tr>
+						<?php } ?>
+						<?php if($hasil->TELKOM_TAB_WJB_PERUMAHAN){ ?>
+						<tr>
+						  	<td>Tab Wjb Perumahan (Telkom)</td>
+							<td align="right"><?php echo $hasil->TELKOM_TAB_WJB_PERUMAHAN ?></td>
+						</tr>
+						<?php } ?>
+						<?php if($hasil->TELKOM_SUMB_DANA_KEMATIAN){ ?>
+						<tr>
+						  	<td>Sumb Dana Kematian (Telkom)</td>
+							<td align="right"><?php echo $hasil->TELKOM_SUMB_DANA_KEMATIAN ?></td>
+						</tr>
+						<?php } ?>
+						<tr>
+						  	<td>&nbsp;</td>
+							<td align="right">&nbsp;</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+			<td>
+				
+				<table cellpadding="0" cellspacing="0" width="400px">
+					<tr>
+					  	<td>T o t a l</td>
+						<td width="120px;" align="right" style="border-top: 2px solid;"><?php echo $hasil->JML_PENDAPATAN ?></td>
+					</tr>
+				</table>
+			</td>
+			<td>
+				<table cellpadding="0" cellspacing="0" width="400px">
+					<tr>
+					  	<td>T o t a l</td>
+						<td width="120px;" align="right" style="border-top: 2px solid;"><?php echo $hasil->JML_POTONGAN ?></td>
+					</tr>
+				</table>
+			</td>
+			</tr>
+		</table>
+	<br>
+	Pendapatan Dibayarkan : <b>Rp. <?php echo $hasil->JML_ALL ?></b><br>
+	Terbilang: <b><?php echo $hasil->TERBILANG ?></b>
+	<br>
+	<br>
+	- Gaji Pokok Pensiun (GPP) : <?php echo $hasil->GPP ?><br>
+	- Hari Lembur Biasa/Libur : <?php echo $hasil->LEMBUR_HARI_BIASA ?> / <?php echo $hasil->LEMBUR_HARI_LIBUR ?> Hari <br>
+	- Hari Kerja : <?php echo $hasil->JML_HR_KERJA ?> Hari
+	
+	</div>
+
+</div>
+						
+						
+<?php }else{ ?>
+
+<div style="padding: 50px;">
+Data Tidak Ditemukan.
+</div>
+
+<?php } ?>
+						
+					</div>
+					
+				</div>
+		<div id="postscript-right" class="grid_8">
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+
+<script type="text/javascript">
+	function exportPDF()
+    {
+    	var xx = document.getElementById('paym_bulan').value;
+    	
+    	var period = xx;
+    	window.open('/gajipdf?period='+period);
+    }
+</script>

@@ -1,0 +1,1203 @@
+<?php
+require_once ("SqlServer/SqlServerAdapter.php");
+require_once('ariwa/myTcpdf2.php');	
+class ContentController extends Controller
+{
+	/**
+	 * Declares class-based actions.
+	 */
+	
+	public function init(){
+       
+       $criteria = new CDbCriteria;
+		$activeTheme = Sites::model()->find($criteria);
+		
+		//var_dump($activeTheme->themes->slug);
+		
+		Yii::app()->themeManager->basePath .= '/'.$activeTheme->themes->slug;
+        Yii::app()->themeManager->baseUrl .= '/'.$activeTheme->themes->slug;
+
+        Yii::app()->theme = ''; // You can set it there or in config or somewhere else before calling render() method.
+	} 
+	 
+	public function actions()
+	{
+		return array(
+			// captcha action renders the CAPTCHA image displayed on the contact page
+			'captcha'=>array(
+				'class'=>'CCaptchaAction',
+				'backColor'=>0xFFFFFF,
+			),
+			// page action renders "static" pages stored under 'protected/views/site/pages'
+			// They can be accessed via: index.php?r=site/page&view=FileName
+			'page'=>array(
+				'class'=>'CViewAction',
+			),
+		);
+	}
+
+	/**
+	 * This is the default 'index' action that is invoked
+	 * when an action is not explicitly requested by users.
+	 */
+	public function actionIndex()
+	{
+		// renders the view file 'protected/views/site/index.php'
+		// using the default layout 'protected/views/layouts/main.php'
+		$this->render('index');
+	}
+
+	/**
+	 * This is the action to handle external exceptions.
+	 */
+	public function actionError()
+	{
+	    if($error=Yii::app()->errorHandler->error)
+	    {
+	    	if(Yii::app()->request->isAjaxRequest)
+	    		echo $error['message'];
+	    	else
+	        	$this->render('error', $error);
+	    }
+	}
+
+	/**
+	 * Displays the contact page
+	 */
+	public function actionContact()
+	{
+		$model=new ContactForm;
+		if(isset($_POST['ContactForm']))
+		{
+			$model->attributes=$_POST['ContactForm'];
+			if($model->validate())
+			{
+				$headers="From: {$model->email}\r\nReply-To: {$model->email}";
+				mail(Yii::app()->params['adminEmail'],$model->subject,$model->body,$headers);
+				Yii::app()->user->setFlash('contact','Thank you for contacting us. We will respond to you as soon as possible.');
+				$this->refresh();
+			}
+		}
+		$this->render('contact',array('model'=>$model));
+	}
+
+	/**
+	 * Displays the login page
+	 */
+	public function actionLogin()
+	{
+		$model=new LoginForm;
+
+		// if it is ajax validation request
+		if(isset($_POST['ajax']) && $_POST['ajax']==='login-form')
+		{
+			echo CActiveForm::validate($model);
+			Yii::app()->end();
+		}
+
+		// collect user input data
+		if(isset($_POST['LoginForm']))
+		{
+			$model->attributes=$_POST['LoginForm'];
+			// validate user input and redirect to the previous page if valid
+			if($model->validate() && $model->login())
+				$this->redirect(Yii::app()->user->returnUrl);
+		}
+		// display the login form
+		$this->render('login',array('model'=>$model));
+	}
+
+	/**
+	 * Logs out the current user and redirect to homepage.
+	 */
+	public function actionLogout()
+	{
+		Yii::app()->user->logout();
+		$this->redirect(Yii::app()->homeUrl);
+	}
+	
+	public function actionReadnews($slug)
+	{
+		$news = Content::model()->findBySlug($slug);
+		if ($news) {
+			if (isset(Yii::app()->session['contentHits'])) {
+				$dataHits = unserialize(Yii::app()->session['contentHits']);
+				if (is_array($dataHits)) {
+					if (!in_array($news->id, $dataHits)) {
+						Content::model()->addHit($news->id);
+						$dataHits[] = $news->id;
+						Yii::app()->session['contentHits'] = serialize($dataHits);
+					}
+				} else {
+					Content::model()->addHit($news->id);
+					$dataHits = array();
+					$dataHits[] = $news->id;
+					Yii::app()->session['contentHits'] = serialize($dataHits);
+				}
+			} else {
+				Content::model()->addHit($news->id);
+				$dataHits = array();
+				$dataHits[] = $news->id;
+				Yii::app()->session['contentHits'] = serialize($dataHits);
+			}
+			
+		}
+		
+		
+        $idpage = 'readnews';
+		
+		$vars = array(
+			'news' => $news,
+			'idpage' => $idpage,
+		);		
+		$this->render('readnews', $vars);
+	}
+	
+	public function actionReadnewspopular($slug)
+	{
+		$news = Content::model()->findBySlug($slug);
+		if ($news) {
+			if (isset(Yii::app()->session['contentHits'])) {
+				$dataHits = unserialize(Yii::app()->session['contentHits']);
+				if (is_array($dataHits)) {
+					if (!in_array($news->id, $dataHits)) {
+						Content::model()->addHit($news->id);
+						$dataHits[] = $news->id;
+						Yii::app()->session['contentHits'] = serialize($dataHits);
+					}
+				} else {
+					Content::model()->addHit($news->id);
+					$dataHits = array();
+					$dataHits[] = $news->id;
+					Yii::app()->session['contentHits'] = serialize($dataHits);
+				}
+			} else {
+				Content::model()->addHit($news->id);
+				$dataHits = array();
+				$dataHits[] = $news->id;
+				Yii::app()->session['contentHits'] = serialize($dataHits);
+			}
+			
+		}
+		
+		$vars = array('news' => $news);		
+		$this->render('readnewspopular', $vars);
+	}
+	
+	public function actionNewspopular()
+	{
+		$criteria = new CDbCriteria;
+		$criteria->condition = 'content_type_id = 3 AND is_popular = 1';
+		$criteria->order = 'update_time DESC';
+		$allnews = Content::model()->findAll($criteria);
+		
+		$titlepage = 'Berita Populer';
+		
+		$item_count = Content::model()->count($criteria);
+		
+		$pages = new CPagination($item_count);
+		$pages->setPageSize(Yii::app()->params['listPerPage']);
+		$pages->applyLimit($criteria);  // the trick is here!
+		
+		/*
+		$vars= array(
+			'allnews' => $allnews,
+			'titlepage' => $titlepage
+		);
+		*/
+		
+		$vars= array(
+			'allnews'=> $allnews,
+			'model'=> Content::model()->findAll($criteria), // must be the same as $item_count
+			'item_count'=>$item_count,
+			'page_size'=>Yii::app()->params['listPerPage'],
+			'items_count'=>$item_count,
+			'pages'=>$pages,
+			'titlepage' => $titlepage
+		);
+		
+		$this->render('newspopular', $vars);
+	}
+	
+	
+	public function actionNews()
+	{
+		$criteria = new CDbCriteria;
+		$criteria->condition = 'content_type_id = 3 AND publish = 1';
+		$criteria->order = 'update_time DESC';
+		$allnews = Content::model()->findAll($criteria);
+		
+		$item_count = Content::model()->count($criteria);
+		
+		$pages = new CPagination($item_count);
+		$pages->setPageSize(Yii::app()->params['listPerPage']);
+		$pages->applyLimit($criteria);  // the trick is here!
+		
+		
+		$vars= array(
+			'allnews'=> $allnews,
+			'model'=> Content::model()->findAll($criteria), // must be the same as $item_count
+			'item_count'=>$item_count,
+			'page_size'=>Yii::app()->params['listPerPage'],
+			'items_count'=>$item_count,
+			'pages'=>$pages
+		);
+		
+		$this->render('news', $vars);
+	}
+	
+	public function actionReadarticle($slug)
+	{
+		$article = Content::model()->findBySlug($slug);
+		if ($article) {
+			if (isset(Yii::app()->session['contentHits'])) {
+				$dataHits = unserialize(Yii::app()->session['contentHits']);
+				if (is_array($dataHits)) {
+					if (!in_array($article->id, $dataHits)) {
+						Content::model()->addHit($article->id);
+						$dataHits[] = $article->id;
+						Yii::app()->session['contentHits'] = serialize($dataHits);
+					}
+				} else {
+					Content::model()->addHit($article->id);
+					$dataHits = array();
+					$dataHits[] = $article->id;
+					Yii::app()->session['contentHits'] = serialize($dataHits);
+				}
+			} else {
+				Content::model()->addHit($article->id);
+				$dataHits = array();
+				$dataHits[] = $article->id;
+				Yii::app()->session['contentHits'] = serialize($dataHits);
+			}
+			
+		}
+		
+		
+		$vars = array(
+			'article' => $article
+		);
+		
+		/*
+		$html2pdf = Yii::app()->ePdf->HTML2PDF();
+        $html2pdf->WriteHTML($this->renderPartial('readarticle', $vars, true));
+        $html2pdf->Output();
+		*/
+				
+		$this->render('readarticle', $vars);
+	}
+	
+	public function actionArticle()
+	{
+		$criteria = new CDbCriteria;
+		$criteria->condition = 'content_type_id = 6';
+		$criteria->order = 'update_time DESC';
+		$article = Content::model()->findAll($criteria);
+		
+		
+		$item_count = Content::model()->count($criteria);
+		
+		$pages = new CPagination($item_count);
+		$pages->setPageSize(Yii::app()->params['listPerPage']);
+		$pages->applyLimit($criteria);  // the trick is here!
+		
+		
+		$vars= array(
+			'allarticle'=> $article,
+			'model'=> Content::model()->findAll($criteria), // must be the same as $item_count
+			'item_count'=>$item_count,
+			'page_size'=>Yii::app()->params['listPerPage'],
+			'items_count'=>$item_count,
+			'pages'=>$pages
+		);
+		
+		
+		
+		//$vars= array('article' => $article);
+		
+		$this->render('article', $vars);
+	}
+	
+	public function actionMediarelease()
+	{
+		//Yii::app()->media->getcontent();
+		
+		Yii::import('application.vendors.*');
+		require_once 'magpierss/rss_fetch.inc';
+		
+		$url = "http://rss.detik.com";
+		$rss = fetch_rss( $url );
+		
+		$title = 'Media Release';
+		
+		//var_dump($rss);
+		
+		$vars= array(
+			'title'=> $title,
+			'rss' => $rss
+			
+		);
+		
+		$this->render('mediarelease', $vars);
+	}
+	
+	public function actionSearch()
+	{
+		$keyword = $_GET['search-keyword'];
+		
+		$title = 'Pencarian';
+		
+		$criteria = new CDbCriteria;
+		$criteria->condition = 'title LIKE "%'.$keyword.'%" or body LIKE "%'.$keyword.'%"' ;
+		$result = Content::model()->findAll($criteria);
+		
+		$item_count = Content::model()->count($criteria);
+		
+		$pages = new CPagination($item_count);
+		$pages->setPageSize(Yii::app()->params['listPerPage']);
+		$pages->applyLimit($criteria);  // the trick is here!
+		
+		$vars= array(
+			'keyword'=> $keyword,
+			'result'=> $result,
+			'model'=> Content::model()->findAll($criteria), // must be the same as $item_count
+			'item_count'=>$item_count,
+			'page_size'=>Yii::app()->params['listPerPage'],
+			'items_count'=>$item_count,
+			'pages'=>$pages,
+			'title' => $title
+		);
+
+		
+		$this->render('search', $vars);
+	}
+	
+	
+	public function actionGallery()
+	{
+		
+		$criteria = new CDbCriteria;
+		$criteria->condition = 'splash = 1' ;
+		$criteria->order = 'update_time DESC';
+		//$criteria->limit = '6' ;
+		$ImageGallery = Content::model()->findAll($criteria);
+		
+		$title = 'Gallery Foto';
+        $idpage = 'gallery';
+		
+		$criteria2 = new CDbCriteria;
+		$criteria2->condition = 'is_popular = 1' ;
+		$criteria2->order = 'update_time DESC';
+		//$criteria->limit = '6' ;
+		$ImgPopular = Content::model()->findAll($criteria);
+		
+		
+		$vars= array(
+			'title' => $title,
+			'idpage' => $idpage,
+			'ImageGallery' => $ImageGallery,
+			'ImgPopular' => $ImgPopular
+		);
+		
+		
+		
+		$this->render('gallery', $vars);
+	}
+	
+	public function actionGallerydetail($slug)
+	{
+		$criteria = new CDbCriteria;
+		$criteria->condition = 'slug ="'.$slug.'"' ;
+		$ImgGallery = Content::model()->find($criteria);
+		
+		$title = 'Gallery Foto';
+		$idpage = 'gallerydetail';
+	
+		$vars= array(
+			'slug'=> $slug,
+			'title'=> $title,
+			'idpage'=> $idpage,
+			'ImgGallery'=> $ImgGallery,
+		);
+		$this->render('gallerydetail', $vars);
+	}
+	
+	public function actionDocument()
+	{
+		$title ='Dokumen';
+		
+		$vars= array(
+			'title' => $title
+		);
+		$this->render('document', $vars);
+	}
+	
+	public function actionApppersonil()
+	{
+		
+		$title = 'Aplikasi Personil';
+        $idpage = 'AplikasiPersonil';
+		
+		$vars= array(
+			'title' => $title,
+			'idpage' => $idpage,
+		);
+		$this->render('apppersonil', $vars);
+	}
+	
+	public function actionAppservice()
+	{
+		
+		$title = 'Aplikasi Kedinasan';
+        $idpage = 'AplikasiKedinasan';
+	
+		$vars= array(
+			'title' => $title,
+			'idpage' => $idpage,
+		);
+		$this->render('appservice', $vars);
+	}
+	
+	public function actionBod()
+	{
+		$title = 'BOD';
+        $idpage = 'bod';
+		
+		
+		$criteria = new CDbCriteria;
+		$criteria->condition = 'content_type_id = 7 AND publish = 1' ;
+		$result = Content::model()->findAll($criteria);
+		
+		$vars= array(
+			'title' => $title,
+			'result' => $result,
+			'idpage' => $idpage,
+		);
+		$this->render('bod', $vars);
+		
+	}
+	
+	public function actionPrint($slug)
+	{
+		
+		$content = Content::model()->findBySlug($slug);
+		
+		
+		
+		$vars = array(
+			'content' => $content
+		);
+		
+		$this->layout = 'mainpdf';
+		
+		
+		
+		$html2pdf = Yii::app()->ePdf->HTML2PDF();
+        $html2pdf->WriteHTML($this->renderPartial('print', $vars, true));
+		
+		//header('Content-Disposition: attachment; filename=fname.pdf');
+		//header("Content-type:application/pdf");
+		
+        $html2pdf->Output();
+		
+				
+		$this->render('print', $vars);
+	}
+	
+	public function actionPassword()
+	{
+		$title = 'Ubah Password';
+        $idpage = 'EditPwd';
+		
+		$vars = array(
+			'title' => $title,
+			'idpage' => $idpage,
+		);
+		
+		$this->render('password', $vars);
+	}
+	
+	public function actionEbook()
+	{
+		$titlepage = 'EBook';
+		$idpage = 'ebook';
+		$title = 'EBook';
+		
+		$criteria = new CDbCriteria;
+		$criteria->condition = 'content_type_id = 8 AND publish = 1' ;
+		$result = Content::model()->findAll($criteria);
+		
+		$item_count = Content::model()->count($criteria);
+		
+		$pages = new CPagination($item_count);
+		$pages->setPageSize(Yii::app()->params['listPerPage']);
+		$pages->applyLimit($criteria);  // the trick is here!
+		
+		$vars = array(
+			'titlepage'=>$titlepage,
+			'model'=> Content::model()->findAll($criteria), // must be the same as $item_count
+			'idpage'=>$idpage,
+			'title'=>$title,
+			'result'=>$result,
+			'item_count'=>$item_count,
+			'pages'=>$pages,
+		);
+		$this->render('ebook', $vars);
+	}
+	
+	
+	public function actionReadcorporate($slug)
+	{
+	
+		$titlePage = 'ReadCorporate';
+		$idpage = 'readcorporate';
+		$title = 'Read Corporate';
+		
+		/*
+		$criteria = new CDbCriteria;
+		$criteria->condition = 'slug ='.$slug ;
+		$result = Content::model()->findAll($criteria);
+		*/
+		
+		$corporate = Content::model()->findBySlug($slug);
+		
+		
+		$vars = array(
+			'titlePage' => $titlePage,
+			'idpage' => $idpage,
+			'title' => $title,
+			'corporate' => $corporate,
+		);
+		$this->render('readcorporate', $vars);
+	}
+	
+	public function actionBirthday()
+	{
+		
+		$query = 'SELECT name, nik, CONCAT_WS("-", MONTH(born_date) , DAY(born_date)) AS born_date, DATEDIFF( CONCAT_WS( "-", YEAR( CURDATE( ) ) , MONTH( born_date ) , DAY( born_date ) ) , curdate( ) ) AS DiffDate
+FROM member
+WHERE month( born_date ) <>0
+AND day( born_date ) <>0
+AND DATEDIFF( CONCAT_WS( "-", YEAR( CURDATE( ) ) , MONTH( born_date ) , DAY( born_date ) ) , curdate( ) ) < 7
+AND DATEDIFF( CONCAT_WS( "-", YEAR( CURDATE( ) ) , MONTH( born_date ) , DAY( born_date ) ) , curdate( ) ) >= 0
+AND nik <> "040742"
+ORDER BY DiffDate ASC
+LIMIT 100';
+			$command = Yii::app()->db->createCommand($query);
+			$birthday = $command->queryAll();
+			
+			$title = 'Yang Berulang Tahun';
+			$idpage = 'Birthday';
+		
+		$vars = array(
+			'title' => $title,
+			'birthday' => $birthday,
+			'idpage' => $idpage,
+		);
+		$this->render('birthday', $vars);
+	}
+	
+	
+	public function actionBirthdaydetail($nik)
+	{
+		$criteria = new CDbCriteria;
+		$criteria->condition = 'nik ="'.$nik.'"';
+		$member = Member::model()->find($criteria);
+		
+		$query = 'SELECT name, nik, CONCAT_WS("-", MONTH(born_date) , DAY(born_date)) AS born_date, DATEDIFF( CONCAT_WS( "-", YEAR( CURDATE( ) ) , MONTH( born_date ) , DAY( born_date ) ) , curdate( ) ) AS DiffDate
+FROM member
+WHERE month( born_date ) <>0
+AND day( born_date ) <>0
+AND DATEDIFF( CONCAT_WS( "-", YEAR( CURDATE( ) ) , MONTH( born_date ) , DAY( born_date ) ) , curdate( ) ) < 7
+AND DATEDIFF( CONCAT_WS( "-", YEAR( CURDATE( ) ) , MONTH( born_date ) , DAY( born_date ) ) , curdate( ) ) >= 0
+AND nik <> "111396"
+ORDER BY DiffDate ASC
+LIMIT 100';
+			$command = Yii::app()->db->createCommand($query);
+			$birthday = $command->queryAll();	
+		
+		$title = 'Birtday Detail';
+		$idpage = 'BirthdayDetail';
+		
+		$vars = array(
+			'title' => $title,
+			'idpage' => $idpage,
+			'member' => $member,
+			'birthday' => $birthday,
+		);
+		
+		$this->render('birthdaydetail', $vars);
+	}
+	
+	public function actionEmailto($nik)
+	{
+		$this->layout=false;
+		
+		$criteria = new CDbCriteria;
+		$criteria->condition = 'nik ="'.$nik.'"';
+		$member = Member::model()->find($criteria);
+		
+		$title = 'Send Email';
+		
+		$vars = array(
+			'title' => $title,
+			'member' => $member,
+		);
+		$this->render('emailto', $vars);
+	}
+	
+	public function actionSendemail()
+	{
+		$this->layout=false;
+		
+		$title = 'Send Email';
+		
+		if(isset($_POST['Email'])){
+			
+			$email = $_POST['Email']['sendto'];
+			
+			$title = $_POST['Email']['subject'];
+			$body = $_POST['Email']['body'];
+			
+			Yii::app()->admin_mailer->AddAddress($email);
+			Yii::app()->admin_mailer->Subject = $title;
+			Yii::app()->admin_mailer->MsgHTML($body);
+			Yii::app()->admin_mailer->Send();
+			
+			
+			Yii::app()->user->setFlash('sucsess radius', "Pesan Anda Telah Terkirim Kepada ".$email."");
+		}
+		
+		$vars = array(
+			'title' => $title,
+		);
+		
+		$this->render('sendemail', $vars);
+	}
+	
+	public function actionVideowatch($slug)
+	{
+		$title = 'Video Watch';
+		$idpage = 'VideoWatch';
+		
+		$criteria = new CDbCriteria;
+		$criteria->condition = 'slug ="'.$slug.'"';
+		$WatchVideo = ContentVideo::model()->find($criteria);
+		
+		$criteria = new CDbCriteria;
+		$criteria->condition = 'video_id ='.$WatchVideo->id;
+		$Comments = Comment::model()->findAll($criteria);
+		
+		
+		if(!empty($Comments)){
+			foreach($Comments as $b){
+				$criteria = new CDbCriteria;
+				$criteria->condition = 'nik ="'.$b->user.'"';
+				$usr = Member::model()->find($criteria);
+				$UsrComment = $usr->name;
+			}
+		} else {
+			$UsrComment = '';
+		}
+		
+		
+		$vars = array(
+			'title' => $title,
+			'idpage' => $idpage,
+			'WatchVideo' => $WatchVideo,
+			'Comments' => $Comments,
+			'UsrComment' => $UsrComment,
+		);
+		
+		$this->render('videowatch', $vars);
+	}
+	
+	public function actionVideo()
+	{
+		$title = 'Gallery Video';
+		$idpage = 'Video';
+
+		$criteria = new CDbCriteria;
+		$criteria->condition = '';
+			$criteria->order = 'upload_time DESC';
+		$Video = ContentVideo::model()->findAll($criteria);
+
+		$vars = array(
+			'title' => $title,
+			'idpage' => $idpage,
+			'Video' => $Video,
+		);
+
+		$this->render('video', $vars);
+	}
+	
+	
+	// ariwa
+	public function actionNewemploye()
+	{
+		if( substr(Yii::app()->session['usr_id'], 0,1) == 'x'){
+			$this->redirect(Yii::app()->request->baseUrl . '/site/index');
+		}
+		
+//		$q = "select emp_id, emp_name, CONVERT(VARCHAR(11), hire_date, 106) AS hire_date_out from employee where RIGHT(CONVERT(VARCHAR(10), hire_date, 105), 7) = RIGHT(CONVERT(VARCHAR(10), GETDATE(), 105), 7) order by hire_date desc";
+		$q = "
+			select x.emp_id, x.emp_name, CONVERT(VARCHAR(11)
+			, x.hire_date, 106) AS hire_date_out 
+			, RIGHT(CONVERT(VARCHAR(10), x.hire_date, 105), 7) as xx
+			, y.dept_name
+			, z.position_desc
+			from employee x
+			left join dept y on x.dept_id = y.dept_id and y.version_id = 'IN2011'
+			left join dept_position z on x.position_latest_id = z.position_id and z.version_id = 'IN2011'
+			where 
+			(
+			RIGHT(CONVERT(VARCHAR(10), x.hire_date, 105), 7) = RIGHT(CONVERT(VARCHAR(10), GETDATE(), 105), 7) 
+			
+			or RIGHT(CONVERT(VARCHAR(10), x.hire_date, 105), 7)
+			= ( convert(varchar(2), (convert(integer,CONVERT(varchar(2), GETDATE(), 101))-1))  +'-'+CONVERT(varchar(4), GETDATE(), 102) )
+			
+			or RIGHT(CONVERT(VARCHAR(10), x.hire_date, 105), 7)
+			= ( convert(varchar(2), (convert(integer,CONVERT(varchar(2), GETDATE(), 101))-2))  +'-'+CONVERT(varchar(4), GETDATE(), 102) )
+			)
+			and x.termination_status = 1
+			order by x.hire_date desc
+		";
+		$con = new Model_SqlServer_SqlServerAdapter();
+		$results = $con->fetchAll($q);
+		
+		$title = 'Karyawan Baru';
+		$idpage = 'Newemploye';
+		
+		$vars = array(
+			'title' => $title,
+			'results' => $results,
+			'idpage' => $idpage,
+		);
+		$this->render('newemploye', $vars);
+	}
+		// ariwa
+	public function actionGaji()
+	{
+		if(isset($_POST['mydropdown'])){
+			$PRD = $_POST['mydropdown'];
+		}else{
+			$PRD = date('Ym');
+		}
+		
+		if( substr(Yii::app()->session['usr_id'], 0,1) == 'x'){
+			$this->redirect(Yii::app()->request->baseUrl . '/site/index');
+		}
+		
+//		$PRD='201301';
+		// NIK
+		$url=PAYMS_SERVER_ENCR.Yii::app()->session['usr_id'];
+	    	$n = @file_get_contents($url);
+		// session id
+	    	$url=PAYMS_SERVER_ENCR.session_id();
+	    	$s = @file_get_contents($url);
+	    
+		$url=PAYMS_SERVER_GET. $n."___".$s."___".$PRD."___".Yii::app()->session['psw'] ;
+//		die($url);
+		$i = @file_get_contents($url);
+	    
+	    $hsl = json_decode($i);
+//	    echo '<pre>';print_r($hsl);die();
+
+	    $title = 'Slip Gaji';
+		$idpage = 'Gaji';
+		if(!$hsl){
+			$hsl->is = 'not_ok';
+		}
+	    if($hsl->is != 'ok'){
+	    	$vars = array(
+				'title' => $title,
+				'results' => $hsl->rslt,
+				'idpage' => $idpage,
+				'period' => $PRD
+			);
+	    }else{
+	    	$vars = array(
+				'title' => $title,
+				'results' => $hsl->rslt,
+				'idpage' => $idpage,
+				'period' => $PRD
+			);
+	    }
+	    
+	    $month = date('m');
+	    $th = date('Y');
+	    $periode_to_view = array();
+	    
+	    for($a = 0;$a<3;$a++){
+	    	$mnt = $month-$a;
+	    	if($mnt<=0){
+	    		$mnt = 12-$mnt;
+	    		$th = $th-1;
+	    	}
+	    	if(strlen($mnt)<2){
+	    		$mnt = "0".$mnt;
+	    	}
+	    	$periode_to_view[] = $th.$mnt;
+	    }
+	    
+	    $vars['periods'] = $periode_to_view;
+//	    print_r($vars['periods']);die();
+	    
+		$this->render('gaji', $vars);
+	}
+	// ariwa
+	public function actionGajipdf()
+	{
+		if( substr(Yii::app()->session['usr_id'], 0,1) == 'x'){
+			$this->redirect(Yii::app()->request->baseUrl . '/site/index');
+		}
+		
+		if(!$_GET['period']){
+			die("Data tidak ditemukan");
+		}
+		$PRD=$_GET['period'];
+		
+		// NIK
+		$url=PAYMS_SERVER_ENCR.Yii::app()->session['usr_id'];
+	    $n = @file_get_contents($url);
+		// session id
+	    $url=PAYMS_SERVER_ENCR.session_id();
+	    $s = @file_get_contents($url);
+	    
+		$url=PAYMS_SERVER_GET. $n."___".$s."___".$PRD."___".Yii::app()->session['psw'] ;
+	    $i = @file_get_contents($url);
+	    
+	    $hsl = json_decode($i);
+	    
+	    if($hsl->is != 'ok'){
+	    	echo 'Data tidak ditemukan';
+	    	exit();
+	    }
+		
+		// ====================
+		
+		$hsl = $hsl->rslt;
+		
+		$footer = 'Document ini diproses secara elektronis dan tidak memerlukan tanda tangan. - ';
+		$footer2 = 'LOGT.03.01 Rev.00';
+		
+		// ---------------------===================== =---------------
+		$pdf = new myTcpdf2(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false, $footer, $footer2);
+		
+		// remove default header/footer
+		$pdf->setPrintHeader(false);
+		$pdf->setPrintFooter(false);
+		
+		// set default monospaced font
+		$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+		
+		//set margins
+		$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+		
+		//set auto page breaks
+		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+		
+		
+		// set font
+		$pdf->SetFont('times', 'BI', 20);
+		
+		// add a page
+		$pdf->AddPage();
+		
+		// set some text to print
+		
+		$html1 = '
+			<table cellpadding="2" cellspacing="0">
+			 	<tr>
+			  	<td width="280px">
+					<div style="border: 1px solid #000;">
+					<br>
+						<table cellpadding="0" cellspacing="0">
+						 	<tr>
+						  	<td width="80px">NAMA KARYAWAN</td>
+							<td width="5px">:</td>
+							<td width="195px">'.$hsl->NAMA_KARYAWAN.'</td>
+							</tr>
+							<tr>
+						  	<td>NO KARYAWAN</td>
+							<td>:</td>
+							<td>'.$hsl->NIK.'</td>
+							</tr>
+							<tr>
+						  	<td>DEPARTEMEN</td>
+							<td>:</td>
+							<td>'.$hsl->DEPARTEMEN.'</td>
+							</tr>
+						</table>
+					</div>
+				</td>
+				<td width="90px">
+					<img src="http://'.$_SERVER["HTTP_HOST"].'/logo.png">
+				</td>
+				<td width="160px" style="font-size: 20px;">
+					<br>
+					<br>
+					<br>
+					<br>
+					Jl. RS Fatmawati 77-81. Jakarta 12150<br>
+					Phone. 021 7201221. Fax. 021 7201226
+				</td>
+				</tr>
+			</table>
+		';
+		
+		$pdf->SetFont('dejavusans', '', 8);
+		$pdf->writeHTML($html1, true, false, true, false, '');
+		
+		
+		$html = '
+		<div style="padding: 2px;width: 1010px;">
+			
+			<div style="padding: 5px;">
+				<div style="text-align: center;">
+					<b>PERINCIAN PENDAPATAN</b><br>
+					BULAN: '.$hsl->BULAN.'
+				</div>
+				<br>
+				<br>
+				<table cellpadding="0" cellspacing="0">
+				 <tr>
+				  	<td width="240px" style="vertical-align: top;">
+			  		[I] PENDAPATAN
+			  		<br>
+			  		<br>
+					<table cellpadding="0" cellspacing="0" width="230px">
+						<tr>
+						  	<td width="10px">A)</td>
+							<td colspan="2" width="110px">Gaji Pokok</td>
+							<td width="70px" align="right">'.$hsl->GAJI_POKOK.'</td>
+						</tr>
+						<tr>
+						  	<td>&nbsp;</td>
+							<td colspan="2">&nbsp;</td>
+							<td align="right">&nbsp;</td>
+						</tr>
+						<tr>
+						  	<td>&nbsp;</td>
+							<td colspan="2">&nbsp;</td>
+							<td align="right">&nbsp;</td>
+						</tr>
+						<tr>
+						  	<td>B)</td>
+							<td colspan="2">Tunjangan</td>
+							<td align="right">&nbsp;</td>
+						</tr>
+							
+							';
+							if($hsl->TUNJ_TIDAK_TETAP){
+							$html .= '
+							<tr>
+							  	<td width="10px">&nbsp;</td>
+								<td width="10px">&nbsp;</td>
+								<td width="100px">Tidak Tetap</td>
+								<td align="right" width="70px">'.$hsl->TUNJ_TIDAK_TETAP.'</td>
+							</tr>';
+							}
+							if($hsl->TUNJ_JABATAN){
+							$html .= '
+							<tr>
+							  	<td width="10px">&nbsp;</td>
+								<td width="10px">&nbsp;</td>
+								<td width="100px">Jabatan</td>
+								<td align="right" width="70px">'.$hsl->TUNJ_JABATAN.'</td>
+							</tr>';
+							}
+							if($hsl->TUNJ_TRANSISI_ORPROM){
+							$html .= '
+							<tr>
+							  	<td width="10px">&nbsp;</td>
+								<td width="10px">&nbsp;</td>
+								<td width="100px">Transisi (Orprom)</td>
+								<td align="right" width="70px">'.$hsl->TUNJ_TRANSISI_ORPROM.'</td>
+							</tr>';
+							}
+							if($hsl->TUNJ_TRANSISI_LAINYA){
+							$html .= '
+							<tr>
+							  	<td width="10px">&nbsp;</td>
+								<td width="10px">&nbsp;</td>
+								<td width="100px">Transisi (Lainya)</td>
+								<td align="right" width="70px">'.$hsl->TUNJ_TRANSISI_LAINYA.'</td>
+							</tr>';
+							}
+							if($hsl->TUNJ_TRANSISI_PGS){
+							$html .= '
+							<tr>
+							  	<td width="10px">&nbsp;</td>
+								<td width="10px">&nbsp;</td>
+								<td width="100px">Transisi PGS</td>
+								<td align="right" width="70px">'.$hsl->TUNJ_TRANSISI_PGS.'</td>
+							</tr>';
+							}
+							if($hsl->TUNJ_TRANSISI_HP){
+							$html .= '
+							<tr>
+							  	<td width="10px">&nbsp;</td>
+								<td width="10px">&nbsp;</td>
+								<td width="100px">Transisi HP</td>
+								<td align="right" width="70px">'.$hsl->TUNJ_TRANSISI_HP.'</td>
+							</tr>';
+							}
+							
+						$html .= '<tr>
+						  	<td>&nbsp;</td>
+							<td colspan="2">&nbsp;</td>
+							<td align="right">&nbsp;</td>
+						</tr>';
+						
+						if($hsl->RAPEL){
+						$html .= '
+						<tr>
+						  	<td>*)</td>
+							<td colspan="2">Rapel Gaji</td>
+							<td align="right">'.$hsl->RAPEL.'</td>
+						</tr>';
+						}
+						if($hsl->UPAH_LEMBUR){
+						$html .= '
+						<tr>
+						  	<td>*)</td>
+							<td colspan="2">Upah Lembur</td>
+							<td align="right">'.$hsl->UPAH_LEMBUR.'</td>
+						</tr>';
+						}
+					$html .= '</table>
+				</td>
+				<td width="240px" style="vertical-align: top;">
+					[II] POTONGAN2
+					<br>
+			  		<br>
+					<table cellpadding="0" cellspacing="0" width="230px">
+						<tr>
+						  	<td width="150px">Pot. DAPIN</td>
+							<td width="70px;" align="right">'.$hsl->POT_DAPIN.'</td>
+						</tr>
+						<tr>
+						  	<td>Pot. JAMSOSTEK</td>
+							<td align="right">'.$hsl->POT_JAMSOSTEK.'</td>
+						</tr>
+						<tr>
+						  	<td>Pot. DPLK</td>
+							<td align="right">'.$hsl->POT_DPLK.'</td>
+						</tr>
+						<tr>
+						  	<td>Pot. DAPENTEL</td>
+							<td align="right">'.$hsl->POT_DAPENTEL.'</td>
+						</tr>
+						<tr>
+						  	<td>Pot. Pinjaman / Excess</td>
+							<td align="right">'.$hsl->POT_PINJAMAN_OR_EXCESS.'</td>
+						</tr>
+						<tr>
+						  	<td>Pot. Lain lain</td>
+							<td align="right">'.$hsl->POT_LAIN_LAIN.'</td>
+						</tr>
+						<tr>
+						  	<td>Pot. SPIN</td>
+							<td align="right">'.$hsl->POT_SPIN.'</td>
+						</tr>
+						<tr>
+						  	<td>Pot. ZIS (BDI)</td>
+							<td align="right">'.$hsl->POT_ZIS_OR_BDI.'</td>
+						</tr>
+						<tr>
+						  	<td>Tab. Pokok</td>
+							<td align="right">'.$hsl->TAB_POKOK.'</td>
+						</tr>
+						<tr>
+						  	<td>Tab. Wajib</td>
+							<td align="right">'.$hsl->TAB_WAJIB.'</td>
+						</tr>
+						<tr>
+						  	<td>Tab. Sukarela</td>
+							<td align="right">'.$hsl->TAB_SUKARELA.'</td>
+						</tr>
+						<tr>
+						  	<td>Pot. Belanja / Pinjaman</td>
+							<td align="right">'.$hsl->POT_BELANJA_OR_PINJAMAN.'</td>
+						</tr>
+						<tr>
+						  	<td>Pot. IMC / Flexi</td>
+							<td align="right">'.$hsl->POT_IMC_FLEXI.'</td>
+						</tr>';
+						
+						if($hsl->TELKOM_IURAN_TASPEN){
+						$html .= '
+						<tr>
+						  	<td>Iuran Taspen (Telkom)</td>
+							<td align="right">'.$hsl->TELKOM_IURAN_TASPEN.'</td>
+						</tr>';
+						}
+						if($hsl->TELKOM_TAB_WJB_PERUMAHAN){
+						$html .= '
+						<tr>
+						  	<td>Tab Wjb Perumahan (Telkom)</td>
+							<td align="right">'.$hsl->TELKOM_TAB_WJB_PERUMAHAN.'</td>
+						</tr>';
+						}
+						if($hsl->TELKOM_SUMB_DANA_KEMATIAN){
+						$html .= '
+						<tr>
+						  	<td>Sumb Dana Kematian (Telkom)</td>
+							<td align="right">'.$hsl->TELKOM_SUMB_DANA_KEMATIAN.'</td>
+						</tr>';
+						}
+						$html .= '<tr>
+						  	<td>&nbsp;</td>
+							<td align="right">&nbsp;</td>
+						</tr>
+					</table>
+				</td>
+				</tr>
+				
+				<tr>
+				<td>
+					<table width="240px">
+						<tr>
+							<td width="120px">T o t a l</td>
+							<td width="70px;" align="right">
+							<div style="border-top: 0px solid #000;">'.$hsl->JML_PENDAPATAN.'</div>
+							</td>
+						</tr>
+					</table>
+				</td>
+				<td>
+					<table width="240px">
+						<tr>
+						  	<td width="150px">T o t a l</td>
+							<td width="70px;" align="right">
+							<div style="border-top: 0px solid #000;">'.$hsl->JML_POTONGAN.'</div>
+							</td>
+						</tr>
+					</table>
+				</td>
+				</tr>
+				
+				</table>
+			<br>
+			Pendapatan Dibayarkan : <b>Rp. '.$hsl->JML_ALL.'</b><br>
+			Terbilang: <b>'.$hsl->TERBILANG.'</b>
+			<br>
+			<br>
+			- Gaji Pokok Pensiun (GPP) : '.$hsl->GPP.'<br>
+			- Hari Lembur Biasa/Libur : '.$hsl->LEMBUR_HARI_BIASA.' / '.$hsl->LEMBUR_HARI_LIBUR.' Hari <br>
+			- Hari Kerja : '.$hsl->JML_HR_KERJA.' Hari
+			
+			</div>
+		
+		</div>
+		';
+		
+		$pdf->SetFont('dejavusans', '', 8);
+		$pdf->writeHTML($html, true, false, true, false, '');
+		
+		$pdf->Output('Form Vendor List.pdf', 'I');
+		
+		exit();
+	}
+}

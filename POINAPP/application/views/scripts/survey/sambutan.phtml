@@ -1,0 +1,118 @@
+<link rel="stylesheet" href="<?php echo $this->baseUrl() ?>/mobile/validator/jquery.validation.css">
+<script src="<?php echo $this->baseUrl() ?>/mobile/validator/jquery.validation.js"></script>
+
+<div data-uk-observe="" id="wizard_advanced" role="application" class="wizard clearfix">
+<div class="steps clearfix">
+	<ul role="tablist">
+		<li role="tab" class="first current" aria-disabled="false" aria-selected="true">
+			<a href="#">
+				<span class="number">1</span> <span class="title">Kata Sambutan</span></a></li>
+		<li role="tab" class="disabled" aria-disabled="true">
+			<a href="#">
+				<span class="number">2</span> <span class="title">Form Survey</span></a></li>
+		<li role="tab" class="disabled last" aria-disabled="true">
+			<a href="#">
+				<span class="number">3</span> <span class="title">Pernyataan Persetujuan</span></a>
+		</li>
+		<li role="tab" class="disabled last" aria-disabled="true">
+			<a href="#">
+				<span class="number">4</span> <span class="title">Finish</span></a>
+		</li>
+	</ul>
+</div>
+</div>
+
+        <div id="page_content">
+            <div id="page_content_inner">
+            	<h2 class="heading_b uk-margin-bottom"><?php echo $this->poll['poll_name'] ?></h2>
+               <div class="md-card">
+                  <div class="md-card-content">
+                     
+                    <div>
+                    <div style="text-align: center;margin-bottom: 20px;font-size: 18px;font-weight: bold;">
+                    PENGANTAR<br>
+				SURVEY ON-LINE ETIKA BISNIS<br>
+				TAHUN 2016<br>
+				</div>
+				
+				<p>Karyawan dan Karyawati MDMEDIA yang kami banggakan,
+				</p>
+				<p>Sebagai Digital Campany,  MDMEDIA harus melakukan transformasi di sisi people,  culture and organization,  khususnya Nilai Etika Bisnis dan nilai-nilai yang terkandung dalam Grcal Spirit 3S(Solid, Speed Smart)  yang dilandasi dengan nilai integritas,  antusisas dan totalitas.  
+				</p>
+				<p>Untuk memastikan seluruh Karyawan MDMEDIA mampu mengelola perusahaan ini dengan baik dan benar,  maka sotiap karyawan diminta untuk memahami dan menjalankan semua ketertuan peraturan dan perundangan yang berlaku.
+				</p>
+				<p>Pada penandatanganan Surat Pernyataan Etika Bisnis secara on-line ini,  kami minta kepada setiap karyawan untuk melakukan self assessment terhadap pemahaman peraturan/  kebijaksanaan Mandatory Etika Bisnis Family sehingga tahu tindakan mana yang harus dilakukan (Do)  dan tindakan mana yang harus dihindari (Do No).  Oleh karenanya,  kami sarankan sebelum melakukan self assessment agar membaca dengan scksama aturan-aturan dan referensi yang terkuil dengan Etika Bisnis yang borlaku di Telkom.
+				</p>
+				<p>Atas keikutsertaan Saudara diucapkan terimakasih.
+				</p>
+				<p>Salam 3GO!!!
+				</p>
+                     </div>
+                     <form class="uk-form-stacked" id="form_validation">
+                     	<input type="hidden" name="step_id" id="step_id" value="A"/>
+                     	
+	                    <div class="uk-grid" data-uk-grid-margin>
+		                    <div class="uk-width-medium-1-1">
+		                   		<input type="submit" class="md-btn md-btn-primary" value="Next>>">
+						</div>
+					</div>
+									 
+                    </form>
+                     
+                  </div>
+               </div>               
+            </div>
+         </div>
+<script type="text/javascript">
+
+	$('#form_validation').validate({
+        submit: {
+            settings: {
+                inputContainer: '.field'
+            },
+            callback: {
+	            onError: function(){
+	            	alert('Ada kesalahan pengisian data. Silahkan dicek kembali.');
+	            	return false;
+	            },
+	            onBeforeSubmit: function (node) {
+	            },
+	            onSubmit: function (node) {
+	                var postData = $('#form_validation').serializeArray();
+				    $(".loading-div-main").show(); //show loading element
+			  		jQuery.ajax({
+						type: "POST", 
+						url: '<?php echo $this->baseUrl()."/".$this->controller_name ?>/updatestatus',
+						dataType: "text",
+						data: postData,
+						success:function(response){
+							if(isJson(response)){
+								var getpar = jQuery.parseJSON(response);
+								if(typeof getpar =='object')
+								{
+									if(getpar.success){
+										$(".loading-div-main").show(); //show loading element
+										setpage('<?php echo $this->baseUrl() ?>/survey')
+									}else{
+										swal(getpar.msg, "", "warning");
+									}
+								}
+							}else{
+							  alert(response);
+							}
+							$(".loading-div-main").hide(); //once done, hide loading element
+						}
+						,error: function (e, status) {
+			  				alert(e.responseText);
+			  				$(".loading-div-main").hide(); //once done, hide loading element
+				        }
+					});
+	            }
+            }
+        },
+        debug: true
+    });
+
+$(".loading-div-main").hide();
+$(".loading-div").hide();
+</script>

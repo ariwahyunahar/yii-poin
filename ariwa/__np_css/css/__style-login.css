@@ -1,0 +1,226 @@
+body{
+	background:url(../img/bglogin_examp.png) #FFFFFF;
+	font-family:Tahoma, Arial, Verdana, sans-serif;
+	color:#666;
+
+}
+
+a{
+	text-decoration: none;
+	color:#666;
+}
+
+.inner{
+	margin: 5px;
+}
+
+.shadow{
+	box-shadow: 2px 2px 5px 2px #666;
+}
+
+.radius{
+	border-radius: 4px;
+}
+
+label{
+	display: block;
+	margin-bottom: 10px;
+	margin-top: 10px;
+	font-weight: bold;
+}
+
+input{
+	padding: 3px;
+	width: 270px;
+	height: 20px;
+}
+
+ul{
+	list-style: none;
+}
+
+ul li{
+	display: inline;
+	margin: 0 11px;
+}
+
+ul li#copyright{
+	font-family:Tahoma, Arial, Verdana, sans-serif;
+	font-size: 12px;
+	font-weight: normal;
+}
+
+#LoginForm_rememberMe{
+	float: left;
+	width: auto;
+	margin:10px 0 0 0;
+}
+
+.rememberMe label{
+	float: left;
+	margin:10px 0 0 0;
+	vertical-align: middle;
+	font-weight: normal;
+}
+
+#LoginButton{
+	margin-top: 1px;
+	margin-left: 2px;
+	width: auto;
+	height: 65px;
+	border: none;
+	cursor: pointer;
+	background: #EE2D24; /* Old browsers */
+	color:#fff;
+	font-weight: bold;
+}
+
+#header-wrapper{
+	background:#F2F2F2;
+	padding: 5px;
+	margin-bottom: 70px;
+}
+
+#logo{
+	height: 143px;
+	background:url(../img/front.png)no-repeat center;
+}
+
+#main{
+	/*background:url(../img/slide_hut28.jpg) no-repeat;
+	width:618px;
+	height:392px;*/
+}
+
+#img-front{
+}
+
+#login-area{
+	background: #F2F2F2; /* Old browsers */
+	padding: 20px;
+	height: 300px;
+}
+
+#login-area .inner{
+	/*background:url(../img/login-area.png) no-repeat right bottom;*/
+}
+
+#login-area .flash-error{
+    color: #ff0000;
+    margin-top: 5px;
+}
+
+#login-area .buttons{
+    text-align: right;
+}
+
+.menu{
+	font-family:Yanone Kaffeesatz;
+	font-weight: bold;
+	font-size: 15px;
+}
+
+#torso{
+	margin-bottom: 40px;
+}
+
+#NewsFlash{
+}
+
+#NewsFlash #title{
+	float: left;
+	color:#000;
+}
+
+#NewsFlash #bgimg{
+	margin-left: 10px;
+	margin-right: 10px;
+	float: left;
+	color:#000;
+}
+
+
+#NewsFlash span{
+	font-weight: bold;
+}
+
+
+#NewsFlash #content-row{
+	float: left;
+	color:#000;
+	height: 28px;
+	overflow:hidden;
+	width: 60%;
+}
+
+#NewsFlash #content-row a,
+#NewsFlash #content-row a:hover{
+	color:#fff;
+}
+
+#NewsFlash .row{
+	width: 100%;
+}
+
+#NewsFlashNavigation{
+	float: left;
+	width: 7%;
+}
+
+#NewsFlashNavigation ul{
+	list-style: none;
+	margin:0px;
+	margin-top: -1px;
+	margin-bottom: 9px;
+}
+
+#NewsFlashNavigation ul li{
+	display: inline;
+	margin:0px;
+}
+
+#NewsFlashNavigation ul li a{
+}
+
+#giude{
+	background:#FECF07;
+	border: 2px solid #ffffff;
+	border-left: none;
+	width:26px;
+	height:100px;
+	position: fixed;
+	border-top-right-radius: 4px;
+	border-bottom-right-radius: 4px;
+	top: 200px;
+	padding: 3px;
+}
+
+#guide:hover{
+	background: #28a6d8; /* Old browsers */
+/* IE9 SVG, needs conditional override of 'filter' to 'none' */
+background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzI4YTZkOCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjUxJSIgc3RvcC1jb2xvcj0iIzI4YTZkOCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwMjcxYmYiIHN0b3Atb3BhY2l0eT0iMSIvPgogICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMDI3MWJmIiBzdG9wLW9wYWNpdHk9IjEiLz4KICA8L2xpbmVhckdyYWRpZW50PgogIDxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9InVybCgjZ3JhZC11Y2dnLWdlbmVyYXRlZCkiIC8+Cjwvc3ZnPg==);
+background: -moz-linear-gradient(top,  #28a6d8 0%, #28a6d8 51%, #0271bf 100%, #0271bf 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#28a6d8), color-stop(51%,#28a6d8), color-stop(100%,#0271bf), color-stop(100%,#0271bf)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  #28a6d8 0%,#28a6d8 51%,#0271bf 100%,#0271bf 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  #28a6d8 0%,#28a6d8 51%,#0271bf 100%,#0271bf 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  #28a6d8 0%,#28a6d8 51%,#0271bf 100%,#0271bf 100%); /* IE10+ */
+background: linear-gradient(top,  #28a6d8 0%,#28a6d8 51%,#0271bf 100%,#0271bf 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#28a6d8', endColorstr='#0271bf',GradientType=0 ); /* IE6-8 */
+	cursor: pointer;
+
+}
+
+#giude .inner{
+	margin:0px;
+	background:url(../img/guide.png) no-repeat;
+	width:26px;
+	height: 100px;
+}
+
+#giude .inner a{
+}
+
+#giude .inner a span{
+	color: transparent;
+	padding: 0 20px 80px 0;
+}

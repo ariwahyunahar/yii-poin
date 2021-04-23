@@ -1,0 +1,1 @@
+<p style="text-align: center;"><iframe src="https://bimasislam.kemenag.go.id/widget/jadwalshalat/42d38931fbd98d4764cc39ab8694a0f1f42d2e7d" frameborder="0" width="220" height="220"></iframe></p>

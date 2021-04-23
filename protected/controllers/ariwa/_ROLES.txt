@@ -1,0 +1,4 @@
+label: Label untuk List dan form, default: nama field
+wl: Lebar/width untuk list, default: 100
+align: Align List, right/left, default: left
+hidden: is hidden, default: false

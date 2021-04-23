@@ -1,0 +1,124 @@
+<link rel="stylesheet" href="<?php echo $this->baseUrl() ?>/mobile/datepicker/BeatPicker.min.css">
+<script src="<?php echo $this->baseUrl() ?>/mobile/datepicker/BeatPicker.min.js"></script>
+<link rel="stylesheet" href="<?php echo $this->baseUrl() ?>/mobile/validator/jquery.validation.css">
+<script src="<?php echo $this->baseUrl() ?>/mobile/validator/jquery.validation.js"></script>
+
+<?php
+$results = $this->results;
+?>
+
+         <div id="page_content">
+            <div id="page_content_inner">
+            	<h2 class="heading_b uk-margin-bottom"><?php echo $this->poll['poll_name'] ?></h2>
+               <div class="md-card">
+                  <div class="md-card-content">
+                     
+                     
+                     <form class="uk-form-stacked" id="form_validation">
+                     	<input type="hidden" name="ACTION" id="ACTION" value="<?php echo $this->action ?>"/>
+                     	<input type="hidden" name="ID" id="ID"/>
+                     	
+                     	<?php
+					if($results){
+						foreach($results as $isi){
+					?>
+                     	
+                     	<div class="uk-accordion" data-uk-accordion>
+	                     	<h3 class="uk-accordion-title"><?php echo $isi['q_text'] ?></h3>
+	                         <div class="uk-accordion-content">
+	                         	<div class="uk-grid" data-uk-grid-margin>
+		                              <?php
+			                     	$jwbns = Model_Survey_PollQuestionAnswer::SgetByQuestionId($isi['q_id']);
+								if($jwbns){
+									echo '<div class="uk-width-medium-1-1">';
+									foreach($jwbns as $jw){
+								?>
+		                        			<div>
+		                                        <input data-validation="[NOTEMPTY]" type="radio" name="<?php echo $isi['q_id'] ?>" id="<?php echo $isi['q_id'].'_'.$jw['answ_id'] ?>" data-md-icheck />
+		                                        <label style="color: #000;" for="<?php echo $isi['q_id'].'_'.$jw['answ_id'] ?>" class="inline-label"><?php echo $jw['answ_id']. ' '. $jw['answ_text'] ?></label>
+		                                   </div>
+		                              <?php
+									}
+									echo '</div>';
+								}
+								?>
+		                        	</div>       
+		                    </div>
+		               </div>         	
+                         <?php
+						}
+					}
+					?>    	
+	                        	
+                     	
+                    <div class="uk-grid" data-uk-grid-margin>
+	                    <div class="uk-width-medium-1-1">
+	                   		<input type="submit" class="md-btn md-btn-primary" value="Save">
+					</div>
+				</div>
+									 
+                    </form>
+                     
+                  </div>
+               </div>               
+            </div>
+         </div>
+<div class="md-fab-wrapper"> 
+</div>
+
+
+<script type="text/javascript">
+$('#form_validation').validate({
+        submit: {
+            settings: {
+                inputContainer: '.field'
+            },
+            callback: {
+	            onError: function(){
+	            	alert('Ada kesalahan pengisian data. Silahkan dicek kembali.');
+	            	return false;
+	            },
+	            onBeforeSubmit: function (node) {
+	            	alert('asdsa');return false;
+	            },
+	            onSubmit: function (node) {
+	                var postData = $('#form_validation').serializeArray();
+				    $(".loading-div-main").show(); //show loading element
+			  		jQuery.ajax({
+						type: "POST", 
+						url: '/<?php echo $this->controller_name ?>/save',
+						dataType:"text",
+						data: postData,
+						success:function(response){
+							if(isJson(response)){
+								var getpar = jQuery.parseJSON(response);
+								if(typeof getpar =='object')
+								{
+									if(getpar.success){
+										swal(getpar.msg, "", "success");
+										setpage('<?php echo $this->baseUrl()."/".$this->controller_name ?>');
+									}else{
+										swal(getpar.msg, "", "warning");
+									}
+								}
+							}else{
+							  alert(response);
+							}
+							$(".loading-div-main").hide(); //once done, hide loading element
+						}
+						,error: function (e, status) {
+			  				alert(e.responseText);
+			  				$(".loading-div-main").hide(); //once done, hide loading element
+				        }
+					});
+	            }
+            }
+        },
+        debug: true
+    });
+    
+
+$(".loading-div").hide();
+</script>
+
+
